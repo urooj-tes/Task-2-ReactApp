@@ -22,23 +22,22 @@ const My_Form = () => {
     language: "",
     colors: "",
   });
-   const [fullNameError, setFullNameError] = useState({});
-   const [cnicError, setCnicError] = useState({});
-   const [emailError, setEmailError] = useState({});
-   const [phoneError, setPhoneError] = useState({});
-   const [genderError, setGenderError] = useState({});
-   const [languageError, setLanguageError] = useState({});
-   const [colorError, setColorError] = useState({});
-   const [countryError, setCountryError] = useState({});
-   const [dateError, setDateError] = useState({});
-
-
+  const [dataError, setDataError] = useState({
+    fullNameError : "",
+    cnicError : "",
+    emailError : "",
+    phoneError : "",
+    genderError : "",
+    languageError : "",
+    colorError : "",
+    countryError: "",
+     dateError : "",
+  });
   const [visible, setVisible] = React.useState(false);
   const [confirmLoading, setConfirmLoading] = React.useState(false);
   const [setValue] = React.useState(1);
 
   const inputEvent = (event, type = "") =>  {
-    //console.log(event);
     const { name, value } = event.target;
       setInfoData((updatedValue) => {
         return {
@@ -52,84 +51,66 @@ const My_Form = () => {
     if (atSymbol <1) return false;
     return true;
   };
-
   const formValidation = () =>{
-    const fullNameError = {};
-    const cnicError = {};
-    const emailError = {};
-    const phoneError = {};
-    const genderError = {};
-    const languageError = {};
-    const colorError = {};
-    const countryError= {};
-    const dateError = {};
-
+    let dataError= {} ;
     let isValid = true;
 
    if(infoData.fullName ===""){
-      fullNameError.fullNameShort = "Full Name cannot be empty. Please fill it.";
+      dataError.fullNameError= "Full Name cannot be empty. Please fill it.";
       isValid = false;
     }else if(infoData.fullName.trim().length >=1 && infoData.fullName.trim().length<3){
-      fullNameError.fullNameShort = "Name is too short. It must have atleast 3 characters";
+      dataError.fullNameError = "Name is too short. It must have atleast 3 characters";
       isValid = false;
     }else if(infoData.fullName.trim().length >15){
-      fullNameError.fullNameShort = "Name is too long. It must not have more than 15 numbers.";
+      dataError.fullNameError= "Name is too long. It must not have more than 15 numbers.";
       isValid = false;
     }
      if(infoData.cnic === " "){
-      cnicError.cnicIssue = "CNIC cannot be empty. Please fill it.";
+      dataError.cnicError = "CNIC cannot be empty. Please fill it.";
       isValid = false;
     }   
     else if(infoData.cnic.trim().length < 13 ){
-      cnicError.cnicIssue = "Please enter 13 digit number. It is less than 13";
+      dataError.cnicError = "Please enter 13 digit number. It is less than 13";
       isValid = false;
     }else if(infoData.cnic.trim().length > 13 ){
-      cnicError.cnicIssue = "Please enter 13 digit number. It is greater than 13";
+      dataError.cnicError= "Please enter 13 digit number. It is greater than 13";
       isValid = false;
     }
     if(infoData.email===""){
-      emailError.emailShort = "Email cannot be empty."
+      dataError.emailError = "Email cannot be empty."
     }
     else if(!isEmail(infoData.email)){
-      emailError.emailShort = "Invalid email."
+      dataError.emailError = "Invalid email."
       isValid = false;
     }
-    if(infoData.mobileNo.trim().length != 10 ){
-      phoneError.phoneShort = "Please enter a 10 digit phone number.";
+    if(infoData.mobileNo.trim().length !== 10 ){
+      dataError.phoneError= "Please enter a 10 digit phone number.";
       isValid = false;
     }
     if(infoData.date===""){
-      dateError.dateSelect = "Please select DOB.";
+      dataError.dateError = "Please select DOB.";
       isValid = false;
     }
     if(infoData.country < 1){
-      countryError.countrySelect = "Please select a country.";
+      dataError.countryError = "Please select a country.";
       isValid =false;
     }
     if(infoData.gender===""){
-      genderError.genderSelect = "Please select your gender."
+      dataError.genderError = "Please select your gender."
       isValid = false;
     }
     if(infoData.language.length <=1){
-      languageError.languageSelect = "Please select atleast two languages."
+      dataError.languageError = "Please select atleast two languages."
       isValid = false;
     }
     if(infoData.colors === ""){
-      colorError.colorSelect = "Please select favorite color."
+      dataError.colorError = "Please select favorite color."
       isValid = false;
     }
-    
-    setFullNameError(fullNameError);
-    setCnicError(cnicError);
-    setEmailError(emailError);
-    setPhoneError(phoneError);
-    setGenderError(genderError);
-    setLanguageError(languageError);
-    setColorError(colorError);
-    setCountryError(countryError);
-    setDateError(dateError);
-
-
+    //setDataError(dataError);
+       setDataError({
+        ...dataError
+      });
     return isValid;
   }
 
@@ -174,9 +155,7 @@ const My_Form = () => {
           autoComplete="off"
           required
         />
-        {Object.keys(fullNameError).map((key) => {
-          return <div style={{color:'red'}}> {fullNameError[key]}</div>
-        })}
+        {dataError.fullNameError && <p style={{color:'red'}}>{dataError.fullNameError}</p>}
         <b>CNIC:</b>
         <Input
           type="number"
@@ -186,9 +165,7 @@ const My_Form = () => {
           onChange={inputEvent}
           required
         />
-        {Object.keys(cnicError).map((key) => {
-          return <div style={{color:'red'}}> {cnicError[key]}</div>
-        })}
+         {dataError.cnicError && <p style={{color:'red'}}>{dataError.cnicError}</p> }
         <b>Email:</b>
         <Input
           type="text"
@@ -199,9 +176,7 @@ const My_Form = () => {
           onChange={inputEvent}
           required
         />
-        {Object.keys(emailError).map((key) => {
-          return <div style={{color:'red'}}> {emailError[key]}</div>
-        })}
+        {dataError.emailError && <p style={{color:'red'}}>{dataError.emailError}</p> }
         <b>Mobile No:</b>
         <Input
           type="number"
@@ -210,9 +185,7 @@ const My_Form = () => {
           placeholder="+92 --- -------"
           onChange={inputEvent}
         />
-         {Object.keys(phoneError).map((key) => {
-          return <div style={{color:'red'}}> {phoneError[key]}</div>
-        })}
+         {dataError.phoneError && <p style={{color:'red'}}>{dataError.phoneError}</p> }
         <Space direction="vertical">
          <b> Date of Birth:</b>
           <DatePicker
@@ -223,9 +196,7 @@ const My_Form = () => {
             } 
           />
         </Space>
-        {Object.keys(dateError).map((key) => {
-          return <div style={{color:'red'}}> {dateError[key]}</div>
-        })}
+        {dataError.dateError && <p style={{color:'red'}}>{dataError.dateError}</p> }
         <br />
        <b> Select Country</b> <br />
         <Select
@@ -240,9 +211,7 @@ const My_Form = () => {
           <Option value="Nigeria">Nigeria</Option>
           <Option value="China">China</Option>
         </Select>
-        {Object.keys(countryError).map((key) => {
-          return <div style={{color:'red'}}> {countryError[key]}</div>
-        })}
+        {dataError.countryError && <p style={{color:'red'}}>{dataError.countryError}</p> }
         <br />
         <b>Please Select Gender</b> <br />
         <Radio.Group
@@ -255,9 +224,7 @@ const My_Form = () => {
           <Radio value="Female">Female</Radio>
           <Radio value="Other">Other</Radio>
         </Radio.Group>
-        {Object.keys(genderError).map((key) => {
-          return <div style={{color:'red'}}> {genderError[key]}</div>
-        })}
+        {dataError.genderError && <p style={{color:'red'}}>{dataError.genderError}</p> }
         <br />
         <b>Select Languages that you can speak fluently!</b> <br />
         <Select
@@ -295,9 +262,7 @@ const My_Form = () => {
             </div>
           </Option>
         </Select>
-        {Object.keys(languageError).map((key) => {
-          return <div style={{color:'red'}}> {languageError[key]}</div>
-        })}
+        {dataError.languageError && <p style={{color:'red'}}>{dataError.languageError}</p> }
         <br />
        <b> Please select favorite colors:</b>
         <Checkbox.Group
@@ -324,9 +289,7 @@ const My_Form = () => {
             </Col>
           </Row>
         </Checkbox.Group>
-        {Object.keys(colorError).map((key) => {
-          return <div style={{color:'red'}}> {colorError[key]}</div>
-        })}
+        {dataError.colorError && <p style={{color:'red'}}>{dataError.colorError}</p> }
         <br />
         <Button type="primary" onClick={showModal}>
           Submit
