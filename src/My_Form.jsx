@@ -8,26 +8,24 @@ import { Checkbox, Row, Col } from "antd";
 import { Button } from "antd";
 import { Modal } from "antd";
 import { useState } from "react";
+import moment from 'moment';
 import {Form} from  "antd";
 import "./index.css";
-
 const My_Form = () => {
   const [visible, setVisible] = React.useState(false);
   const [confirmLoading, setConfirmLoading] = React.useState(false);
   const [setValue] = React.useState(1);
   const [infoData, setInfoData] = useState({});
-
   const onFinish = (updtedValues) => {
-   const values = {
+   const values = { 
      ...updtedValues,
-     'date': updtedValues['date'].format('YYYY-MM-DD'),
      'language': updtedValues['language'],
      'colors': updtedValues['colors'],
    } 
     setInfoData(updtedValues);
-   showModal();
+     showModal();
   };
-  const showModal = () => {
+  const showModal = (values) => {
     setVisible(true);
   }
   const handleOk = () => {
@@ -44,7 +42,7 @@ const My_Form = () => {
     rules:[{
             required: true,
             message: 'Please select a language.',
-        }
+        },
       ]
   };
   const colorsVal = {
@@ -54,12 +52,11 @@ const My_Form = () => {
           },
         ]
   };
-  const config = {
+  const dateVal = {
     rules: [{
       type: 'object', required: true, 
       message: 'Please select date' }],
   };
-
   return (
     <>
      <Form
@@ -78,7 +75,7 @@ const My_Form = () => {
     >
       <Form.Item
         label="Full Name"
-        name="username"
+        name="fullName"
         rules={[
           {
             required: true,
@@ -90,7 +87,6 @@ const My_Form = () => {
       >
         <Input  type="text"  placeholder="Enter your Full Name"/>
       </Form.Item>
-
       <Form.Item
         label="CNIC"
         name="cnic"
@@ -99,13 +95,16 @@ const My_Form = () => {
             required: true,
             message: 'Please enter your CNIC',
           },
+          { min:13,
+          message: 'Please enter 13 digit number. It is less than 13'},
+          {max: 13,
+            message: 'Please enter 13 digit number. It is greater than 13'},
           {whitespace:true},
         ]}
         hasFeedback
       >
         <Input type="number" placeholder="----- ------- -" />
       </Form.Item>
-
       <Form.Item
         name="email"
         label="Email"
@@ -122,9 +121,8 @@ const My_Form = () => {
         ]}
         hasFeedback
       >
-        <Input type="text" placeholder="example@gmail.com" />
+        <Input type="email" placeholder="example@gmail.com" />
       </Form.Item>
-
       <Form.Item
         label="Mobile No"
         name="mobileNo"
@@ -133,22 +131,26 @@ const My_Form = () => {
             required: true,
             message: 'Please enter your Phone Number',
           },
+          { min:10,
+          message: 'Please enter 10 digit number. It is less than 10'
+          },
+          {max: 10,
+            message: 'Please enter 10 digit number. It is greater than 10'
+            },
           {whitespace:true},
         ]}
         hasFeedback
       >
-        <Input type="number"placeholder="+92 --- -------"/>
+        <Input type="number" placeholder="+92 --- -------"/>
       </Form.Item>
-
       <Form.Item
       label="Date of Birth:"
       name="date"
-      {...config}
+      {...dateVal}
         hasFeedback
       >
           <DatePicker/>
       </Form.Item>
-
       <Form.Item
        label="Country"
        name="country"
@@ -168,7 +170,6 @@ const My_Form = () => {
           <Select.Option value="China">China</Select.Option>
         </Select>
       </Form.Item>
-
       <Form.Item
       label="Please Select Gender"
       name="gender"
@@ -187,7 +188,6 @@ const My_Form = () => {
       <Radio value="Other">Other</Radio>
       </Radio.Group>
       </Form.Item>
-
       <Form.Item
       label="Language"
       name="language"
@@ -196,8 +196,7 @@ const My_Form = () => {
         >
         <Select
           mode="multiple"
-          placeholder="Please Select atleast 1 language"
-          defaultValue={["English "]}
+          placeholder="Please Select languages"
           optionLabelProp="label"
         >
           <Select.Option value="English " label="English ">
@@ -226,7 +225,6 @@ const My_Form = () => {
           </Select.Option>
         </Select>
       </Form.Item>
-
       <Form.Item
       label="Favourite Colors"
       name="colors"
@@ -252,12 +250,8 @@ const My_Form = () => {
             </Col>
           </Row>
         </Checkbox.Group>
-
       </Form.Item>
-
-     
-
-        <Form.Item
+      <Form.Item
         wrapperCol={{
           offset: 8,
           span: 16,
@@ -274,13 +268,12 @@ const My_Form = () => {
         onOk={handleOk}
         confirmLoading={confirmLoading}
         onCancel={handleCancel}
-
       >
-        <p><b>Full Name:</b> {infoData.fullName}</p>
+        <p><b>Full Name:</b>{infoData.fullName}</p>
         <p><b>CNIC:</b> {infoData.cnic}</p>
         <p><b>Email: </b>{infoData.email}</p>
         <p><b>Mobile No:</b> {infoData.mobileNo}</p>
-        <p><b>Date of Birth:</b> {infoData.date}</p>
+        <p><b>Date of Birth:</b> {moment(infoData.date).format('YYYY-MM-DD')}</p>
         <p><b>Country:</b> {infoData.country}</p>
         <p><b>Gender: </b> {infoData.gender}</p>
         <p><b>Language: </b>{infoData.language}</p>
