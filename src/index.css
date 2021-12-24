@@ -35,6 +35,7 @@ button {
 .site-layout-background {
   background: #fff;
 }
-Form{
+/* Form{
      float: left;
-}
+     display: block;
+} */

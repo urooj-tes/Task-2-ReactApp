@@ -7,23 +7,39 @@ import { Radio } from "antd";
 import { Checkbox, Row, Col } from "antd";
 import { Button } from "antd";
 import { Modal } from "antd";
-import { useState } from "react";
+import { useState, useEffect} from "react";
 import moment from 'moment';
 import {Form} from  "antd";
 import "./index.css";
+
 const My_Form = () => {
   const [visible, setVisible] = React.useState(false);
   const [confirmLoading, setConfirmLoading] = React.useState(false);
   const [setValue] = React.useState(1);
   const [infoData, setInfoData] = useState({});
+  const [welcomeMessage, setWelcomeMessage]= useState("");
+  const [registerMessage, setRegisterMessage] = useState("false");
+  const [thanksMessage, setThanksMessage] = useState('false');
+
+    useEffect(()=>{
+      setWelcomeMessage("Welcome to the form!");
+      setRegisterMessage(false)
+      return()=>{
+        console.log('Thank You');
+      }
+    }, []);
+
+
   const onFinish = (updtedValues) => {
    const values = { 
      ...updtedValues,
      'language': updtedValues['language'],
      'colors': updtedValues['colors'],
    } 
+   
     setInfoData(updtedValues);
      showModal();
+     setRegisterMessage(true);
   };
   const showModal = (values) => {
     setVisible(true);
@@ -33,6 +49,7 @@ const My_Form = () => {
     setTimeout(() => {
       setVisible(false);
       setConfirmLoading(false);
+      setThanksMessage(true);
     }, 2000);
   };
   const handleCancel = () => {
@@ -59,6 +76,9 @@ const My_Form = () => {
   };
   return (
     <>
+    {<h1>{welcomeMessage}</h1>}
+    {/* {thanksMessage && <h1>Thank you</h1>} */}
+    {registerMessage && <h1>Form is submitted successfully</h1>}
      <Form
       name="basic"
       labelCol={{
