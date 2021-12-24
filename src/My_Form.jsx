@@ -7,15 +7,16 @@ import { Radio } from "antd";
 import { Checkbox, Row, Col } from "antd";
 import { Button } from "antd";
 import { Modal } from "antd";
-import { useState, useEffect} from "react";
+import { useState, useEffect, useCallback} from "react";
 import moment from 'moment';
 import {Form} from  "antd";
 import "./index.css";
 
+
 const My_Form = () => {
   const [visible, setVisible] = React.useState(false);
   const [confirmLoading, setConfirmLoading] = React.useState(false);
-  const [setValue] = React.useState(1);
+
   const [infoData, setInfoData] = useState({});
   const [welcomeMessage, setWelcomeMessage]= useState("");
   const [registerMessage, setRegisterMessage] = useState("false");
@@ -29,51 +30,56 @@ const My_Form = () => {
       }
     }, []);
 
-
-  const onFinish = (updtedValues) => {
+  const onFinish = useCallback((updtedValues) => {
    const values = { 
      ...updtedValues,
      'language': updtedValues['language'],
      'colors': updtedValues['colors'],
-   } 
-   
-    setInfoData(updtedValues);
+   }
+     setInfoData(updtedValues);
      showModal();
      setRegisterMessage(true);
-  };
-  const showModal = (values) => {
+  }, [infoData]);
+
+  const showModal = useCallback((values) => {
     setVisible(true);
-  }
-  const handleOk = () => {
+  }, [visible]);
+
+  const handleOk = useCallback(() => {
     setConfirmLoading(true);
     setTimeout(() => {
       setVisible(false);
       setConfirmLoading(false);
       setThanksMessage(true);
     }, 2000);
-  };
-  const handleCancel = () => {
+  }, [confirmLoading]);
+
+  const handleCancel = useCallback( () => {
     setVisible(false);   
-  };
-  const languageVal = {
+  }, [visible]);
+
+  const languageVal = useCallback({
     rules:[{
             required: true,
             message: 'Please select a language.',
         },
       ]
-  };
-  const colorsVal = {
+  },[infoData]);
+
+  const colorsVal = useCallback( {
     rules:[{
             required: true,
             message: 'Please select colors.',
           },
         ]
-  };
-  const dateVal = {
+  },[infoData]);
+
+  const dateVal = useCallback({
     rules: [{
       type: 'object', required: true, 
       message: 'Please select date' }],
-  };
+  }, [infoData]);
+  
   return (
     <>
     {<h1>{welcomeMessage}</h1>}
